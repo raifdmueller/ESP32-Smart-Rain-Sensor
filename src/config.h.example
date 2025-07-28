@@ -1,0 +1,32 @@
+/*
+ * Konfigurationsdatei für ESP32 Smart Rain Sensor
+ * 
+ * WICHTIG: Diese Datei nicht in das Git Repository committen!
+ * Kopieren Sie config.h.example zu config.h und tragen Sie Ihre Daten ein.
+ */
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// WiFi Konfiguration
+#define WIFI_SSID "IhrWiFiName"
+#define WIFI_PASSWORD "IhrWiFiPasswort"
+
+// OpenWeatherMap API
+#define OPENWEATHER_API_KEY "IhrOpenWeatherMapAPIKey"
+#define LATITUDE "50.1109"    // Ihre Breitengrad
+#define LONGITUDE "8.6821"    // Ihre Längengrad
+
+// Hardware Konfiguration
+#define PCF8574_ADDRESS 0x20  // I2C Adresse des PCF8574
+
+// Power Management
+#define DEEP_SLEEP_HOURS 6    // Stunden zwischen Aufwachzyklen
+#define WEATHER_CHECK_CYCLES 4 // Alle x Zyklen Wetter prüfen (4 = 1x täglich)
+
+// Debug Optionen
+#define DEBUG_SERIAL true
+#define DEBUG_WEATHER_API false
+#define DEBUG_POWER_CONSUMPTION false
+
+#endif

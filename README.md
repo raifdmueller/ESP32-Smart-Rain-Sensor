@@ -5,26 +5,28 @@
 ![Battery Life](https://img.shields.io/badge/Battery%20Life-15%20Months-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Ein intelligenter Regensensor für Rain Bird Bewässerungssteuerungen, der Wettervorhersagen aus dem Internet nutzt statt nur auf aktuelle Niederschläge zu reagieren.
+**🌍 Languages**: [English](README.md) | [Deutsch](README_DE.md)
+
+An intelligent rain sensor for Rain Bird irrigation controllers that uses weather forecasts from the internet instead of just reacting to current precipitation.
 
 ## 🌟 Features
 
-- **Intelligente Wettervorhersage**: Nutzt OpenWeatherMap API für vorausschauende Bewässerungsentscheidungen
-- **Ultra-Low Power**: 15 Monate Batterielaufzeit mit 4x AA Lithium-Batterien
-- **Rain Bird kompatibel**: Direkter Anschluss an ESP-BAT-BT-6 Controller
-- **Temperaturüberwachung**: DS18B20 Sensor für erweiterte Algorithmen
-- **PCF8574 Interface**: Bewährte I2C-Expander Technologie
-- **Einfache Installation**: Komplett im Rain Bird Gehäuse untergebracht
+- **Intelligent Weather Forecasting**: Uses OpenWeatherMap API for predictive irrigation decisions
+- **Ultra-Low Power**: 15-month battery life with 4x AA lithium batteries
+- **Rain Bird Compatible**: Direct connection to ESP-BAT-BT-6 controller
+- **Temperature Monitoring**: DS18B20 sensor for advanced algorithms
+- **PCF8574 Interface**: Proven I2C expander technology
+- **Easy Installation**: Completely housed within Rain Bird enclosure
 
 ## 🏗️ Hardware Design
 
-### Komponenten
-- **ESP32-C3**: Ultra-low power Mikrocontroller (5µA Deep Sleep)
-- **PCF8574**: I2C GPIO Expander für potentialfreie Schalter-Simulation
-- **DS18B20**: Wasserdichter Temperatursensor
-- **4x AA Lithium**: Primärbatterien für maximale Laufzeit
+### Components
+- **ESP32-C3**: Ultra-low power microcontroller (5µA Deep Sleep)
+- **PCF8574**: I2C GPIO expander for isolated switch simulation
+- **DS18B20**: Waterproof temperature sensor
+- **4x AA Lithium**: Primary batteries for maximum runtime
 
-### Schaltplan
+### Schematic
 ```
                     ESP32-C3
                 ┌─────────────┐
@@ -51,75 +53,75 @@ Ein intelligenter Regensensor für Rain Bird Bewässerungssteuerungen, der Wette
          └─────────────┘
 ```
 
-## ⚡ Stromverbrauch
+## ⚡ Power Consumption
 
-| Komponente | Deep Sleep | Aktiv | Messzeit |
-|------------|------------|-------|----------|
+| Component | Deep Sleep | Active | Measurement Time |
+|-----------|------------|--------|------------------|
 | ESP32-C3 | 5µA | 120mA | 30s |
 | PCF8574 | 2.5µA | 2.5µA | - |
 | DS18B20 | 1µA | 1.5mA | 1s |
-| **Gesamt** | **18.5µA** | **124mA** | - |
+| **Total** | **18.5µA** | **124mA** | - |
 
-**Batterielaufzeit**: 2900mAh ÷ 6.43mAh/Tag = **451 Tage (15 Monate)**
+**Battery Life**: 2900mAh ÷ 6.43mAh/day = **451 days (15 months)**
 
 ## 🔧 Software Features
 
 ### Power Management
-- **Deep Sleep**: 6-Stunden Zyklen mit Timer-Wakeup
-- **Adaptive Intervalle**: Wintermodus (12h), Sommermodus (4h)
-- **Battery Monitoring**: Voltage Divider mit ADC-Messung
-- **Low-Power Modus**: Reduzierte Funktionalität bei <20% Batterie
+- **Deep Sleep**: 6-hour cycles with timer wakeup
+- **Adaptive Intervals**: Winter mode (12h), summer mode (4h)
+- **Battery Monitoring**: Voltage divider with ADC measurement
+- **Low-Power Mode**: Reduced functionality below 20% battery
 
 ### Weather Intelligence
-- **OpenWeatherMap API**: Stundenweise Vorhersagen für 48h
-- **Smart Algorithms**: Berücksichtigt vergangenen und zukünftigen Niederschlag
-- **Caching**: Offline-Funktionalität bei Verbindungsproblemen
-- **Fail-Safe**: Fallback auf lokale Sensordaten
+- **OpenWeatherMap API**: Hourly forecasts for 48h
+- **Smart Algorithms**: Considers past and future precipitation
+- **Caching**: Offline functionality during connection issues
+- **Fail-Safe**: Fallback to local sensor data
 
 ### Rain Bird Interface
-- **PCF8574 Control**: Potentialfreie Schalter-Simulation
-- **Normally Closed Logic**: Kompatibel mit Standard Rain Bird Sensoren
-- **Isolation**: Galvanische Trennung via I2C
-- **Status Monitoring**: Kontinuierliche Funktionsüberwachung
+- **PCF8574 Control**: Isolated switch simulation
+- **Normally Closed Logic**: Compatible with standard Rain Bird sensors
+- **Isolation**: Galvanic separation via I2C
+- **Status Monitoring**: Continuous function monitoring
 
 ## 📦 Installation
 
-### Vorbereitung
-1. Rain Bird ESP-BAT-BT-6 Controller installieren
-2. ESP32-Hardware in das Rain Bird Gehäuse einbauen
-3. Sensor-Anschlüsse identifizieren (SENSOR IN/OUT)
+### Prerequisites
+1. Install Rain Bird ESP-BAT-BT-6 controller
+2. Install ESP32 hardware in Rain Bird enclosure
+3. Identify sensor connections (SENSOR IN/OUT)
 
-### Verdrahtung
+### Wiring
 ```cpp
-// PCF8574 an Rain Bird Sensor-Anschlüsse
+// PCF8574 to Rain Bird sensor connections
 PCF8574 Pin 0  →  SENSOR IN
 ESP32 GND      →  SENSOR OUT
 
-// I2C Verbindungen
+// I2C connections
 ESP32 GPIO2 (SDA)  →  PCF8574 SDA
 ESP32 GPIO4 (SCL)  →  PCF8574 SCL
 
-// Temperatursensor
+// Temperature sensor
 ESP32 GPIO3  →  DS18B20 Data (+ 4.7kΩ Pullup)
 ```
 
 ### Software Setup
-1. Arduino IDE mit ESP32 Board Package installieren
-2. Benötigte Libraries installieren:
-   - `PCF8574` von Renzo Mischianti
-   - `OneWire` und `DallasTemperature`
-   - `ArduinoJson` für API-Calls
-3. `config.h` mit WiFi-Credentials und API-Keys erstellen
-4. Firmware kompilieren und flashen
+1. Install Arduino IDE with ESP32 board package
+2. Install required libraries:
+   - `PCF8574` by Renzo Mischianti
+   - `OneWire` and `DallasTemperature`
+   - `ArduinoJson` for API calls
+3. Create `config.h` with WiFi credentials and API keys
+4. Compile and flash firmware
 
 ## 🌐 Weather API Integration
 
 ### OpenWeatherMap Setup
-1. Account bei OpenWeatherMap erstellen
-2. API Key generieren (1000 calls/day kostenlos)
-3. One Call API 3.0 verwenden für Forecast-Daten
+1. Create account at OpenWeatherMap
+2. Generate API key (1000 calls/day free)
+3. Use One Call API 3.0 for forecast data
 
-### Beispiel API Response
+### Example API Response
 ```json
 {
   "current": {
@@ -184,25 +186,25 @@ ESP32 GPIO3  →  DS18B20 Data (+ 4.7kΩ Pullup)
 
 ## 🤝 Contributing
 
-Beiträge sind willkommen! Bitte erstellen Sie Issues für Bugs oder Feature-Requests.
+Contributions are welcome! Please create issues for bugs or feature requests.
 
 ### Development Setup
 ```bash
 git clone https://github.com/raifdmueller/ESP32-Smart-Rain-Sensor.git
 cd ESP32-Smart-Rain-Sensor
-# Arduino IDE öffnen und Projekt laden
+# Open Arduino IDE and load project
 ```
 
 ## 📄 License
 
-MIT License - siehe [LICENSE](LICENSE) für Details.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-- Rain Bird für die hervorragenden Bewässerungscontroller
-- Espressif für die ESP32 Plattform  
-- OpenWeatherMap für die Weather API
-- Arduino Community für die Libraries
+- Rain Bird for excellent irrigation controllers
+- Espressif for the ESP32 platform
+- OpenWeatherMap for weather API
+- Arduino community for libraries
 
 ---
 

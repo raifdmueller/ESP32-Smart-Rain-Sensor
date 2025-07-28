@@ -7,13 +7,26 @@
 
 **🌍 Sprachen**: [English](README.md) | [Deutsch](README_DE.md)
 
+> **⚠️ WARNUNG - EXPERIMENTELLES PROJEKT**  
+> Dieses Projekt ist aktuell **UNGETESTET** und befindet sich in einer frühen Entwicklungsphase. Das Hardware-Design und die Software wurden noch nicht unter realen Bedingungen validiert. Nutzung auf eigene Gefahr - rechnen Sie mit möglichen Problemen. Wir empfehlen, auf das erste stabile Release zu warten oder beim Testen und Validieren zu helfen.
+
 Ein intelligenter Regensensor für Rain Bird Bewässerungssteuerungen, der Wettervorhersagen aus dem Internet nutzt statt nur auf aktuelle Niederschläge zu reagieren.
+
+## 🚨 Projekt-Status
+
+- **Hardware Design**: ⚠️ Theoretisch - Nicht physisch getestet
+- **Software**: ⚠️ Kompiliert aber nicht feldgetestet  
+- **Rain Bird Integration**: ⚠️ Nicht mit echten Controllern verifiziert
+- **Batterielaufzeit-Angaben**: ⚠️ Basieren auf Berechnungen, nicht gemessen
+- **Weather API**: ⚠️ Basis-Implementierung, braucht Validierung
+
+**Bitte helfen Sie beim Testen und Validieren, falls Sie dieses Projekt nachbauen!**
 
 ## 🌟 Features
 
 - **Intelligente Wettervorhersage**: Nutzt OpenWeatherMap API für vorausschauende Bewässerungsentscheidungen
-- **Ultra-Low Power**: 15 Monate Batterielaufzeit mit 4x AA Lithium-Batterien
-- **Rain Bird kompatibel**: Direkter Anschluss an ESP-BAT-BT-6 Controller
+- **Ultra-Low Power**: 15 Monate Batterielaufzeit mit 4x AA Lithium-Batterien *(berechnet, nicht getestet)*
+- **Rain Bird kompatibel**: Direkter Anschluss an ESP-BAT-BT-6 Controller *(ungetestet)*
 - **Temperaturüberwachung**: DS18B20 Sensor für erweiterte Algorithmen
 - **PCF8574 Interface**: Bewährte I2C-Expander Technologie
 - **Einfache Installation**: Komplett im Rain Bird Gehäuse untergebracht
@@ -62,7 +75,7 @@ Ein intelligenter Regensensor für Rain Bird Bewässerungssteuerungen, der Wette
 | DS18B20 | 1µA | 1.5mA | 1s |
 | **Gesamt** | **18.5µA** | **124mA** | - |
 
-**Batterielaufzeit**: 2900mAh ÷ 6.43mAh/Tag = **451 Tage (15 Monate)**
+**Batterielaufzeit**: 2900mAh ÷ 6.43mAh/Tag = **451 Tage (15 Monate)** ⚠️ *Theoretische Berechnung*
 
 ## 🔧 Software Features
 
@@ -85,6 +98,8 @@ Ein intelligenter Regensensor für Rain Bird Bewässerungssteuerungen, der Wette
 - **Status Monitoring**: Kontinuierliche Funktionsüberwachung
 
 ## 📦 Installation
+
+> **⚠️ VORSICHT**: Diese Installationsanleitung ist theoretisch und ungetestet. Gehen Sie mit äußerster Vorsicht vor und rechnen Sie mit möglichen Problemen.
 
 ### Vorbereitung
 1. Rain Bird ESP-BAT-BT-6 Controller installieren
@@ -114,6 +129,8 @@ ESP32 GPIO3  →  DS18B20 Data (+ 4.7kΩ Pullup)
 3. `config.h` mit WiFi-Credentials und API-Keys erstellen
 4. Firmware kompilieren und flashen
 
+⚠️ **Testen Sie gründlich, bevor Sie das System an Ihr Bewässerungssystem anschließen!**
+
 ## 🌐 Weather API Integration
 
 ### OpenWeatherMap Setup
@@ -141,39 +158,57 @@ ESP32 GPIO3  →  DS18B20 Data (+ 4.7kΩ Pullup)
 
 ## 🔄 Development Roadmap
 
-### Phase 1: MVP (Aktuell)
+### Phase 1: MVP & Testing (Aktuell)
 - [x] Basis Weather API Integration
 - [x] PCF8574 Regensensor-Simulation
 - [x] Deep Sleep Power Management
 - [x] Temperatur-Monitoring
-- [ ] Kompletter Arduino Code
-- [ ] Testen und Validierung
+- [ ] **Hardware-Prototyping und Testen**
+- [ ] **Rain Bird Integration Validierung**
+- [ ] **Feldtest und Validierung**
 
-### Phase 2: Erweiterungen
+### Phase 2: Stabiles Release
+- [ ] Bewiesenes Hardware-Design
+- [ ] Validierte Batterielaufzeit-Messungen
+- [ ] Umfassende Test-Dokumentation
 - [ ] Solar-Charging Option
 - [ ] Webserver für Remote-Monitoring
-- [ ] OTA Updates
-- [ ] Erweiterte Wetter-Algorithmen
-- [ ] Multi-Controller Support
 
-### Phase 3: IoT Integration
+### Phase 3: Erweiterte Features
 - [ ] Home Assistant Integration
 - [ ] MQTT Support
 - [ ] Mobile App
 - [ ] Cloud Data Logging
 - [ ] Predictive Maintenance
 
+## 🧪 Helfen Sie uns beim Testen!
+
+**Wir brauchen Ihre Hilfe, um dieses Projekt zuverlässig zu machen!** Falls Sie sich entscheiden, dieses Projekt nachzubauen:
+
+1. **Dokumentieren Sie alles** - Teilen Sie Ihren Bauprozess, Probleme und Lösungen
+2. **Testen Sie gründlich** - Validieren Sie Stromverbrauch, Rain Bird Integration, Wetter-Genauigkeit
+3. **Berichten Sie zurück** - Erstellen Sie GitHub Issues mit Ihren Erkenntnissen
+4. **Teilen Sie Verbesserungen** - Pull Requests mit Fixes und Verbesserungen sind willkommen
+
+### Was wir validieren müssen
+- [ ] Echte Stromverbrauchs-Messungen
+- [ ] Rain Bird Controller Kompatibilität
+- [ ] PCF8574 Interface Zuverlässigkeit  
+- [ ] Weather API Genauigkeit und Entscheidungslogik
+- [ ] Langzeit-Stabilität und Batterielaufzeit
+- [ ] Umwelt-Haltbarkeit
+
 ## 📊 Batterie-Optimierung
 
-### Berechnete Batterielaufzeit
+### Berechnete Batterielaufzeit ⚠️ *Unverified*
 ```
 4x AA Lithium (2900mAh pro Batterie):
-- Normal-Betrieb: 451 Tage
-- Winter-Modus (12h Zyklen): 680+ Tage
+- Normal-Betrieb: 451 Tage (theoretisch)
+- Winter-Modus (12h Zyklen): 680+ Tage (theoretisch)
 - Mit Solar-Backup: Unbegrenzt
 
 8x AA Konfiguration:
-- Doppelte Kapazität: 30+ Monate
+- Doppelte Kapazität: 30+ Monate (theoretisch)
 - Extreme Wetter-Resistenz
 ```
 
@@ -186,7 +221,14 @@ ESP32 GPIO3  →  DS18B20 Data (+ 4.7kΩ Pullup)
 
 ## 🤝 Contributing
 
-Beiträge sind willkommen! Bitte erstellen Sie Issues für Bugs oder Feature-Requests.
+**Beiträge sind dringend benötigt!** Dieses Projekt braucht Testen und Validierung.
+
+Prioritäts-Beiträge:
+- **Hardware-Testen und Validierung**
+- **Rain Bird Integration Testen**
+- **Stromverbrauchs-Messungen**
+- **Feldtest-Berichte**
+- **Bug-Fixes und Verbesserungen**
 
 ### Development Setup
 ```bash
@@ -208,4 +250,4 @@ MIT License - siehe [LICENSE](LICENSE) für Details.
 
 ---
 
-**Status**: 🚧 In Development | **Hardware**: Tested | **Software**: Beta
+**Status**: 🚧 **EXPERIMENTELL - UNGETESTET** | **Hardware**: Theoretisch | **Software**: Alpha | **Mitwirkende benötigt**: Ja!

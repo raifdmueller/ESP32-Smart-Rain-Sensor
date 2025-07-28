@@ -1,6 +1,8 @@
 # Hardware Design
 
-## Schaltplan
+**🌍 Languages**: [English](docs/hardware.md) | [Deutsch](docs/hardware_DE.md)
+
+## Circuit Diagram
 
 ```
                          ESP32-C3 Ultra-Low Power
@@ -31,7 +33,7 @@
                                                             3.3V
 
                            ┌─────────────┐
-                           │ Batterien   │
+                           │ Batteries   │
                       ┌────│4x AA        │
                       │    │Lithium      │
                       │    │(6V total)   │
@@ -47,29 +49,29 @@
                      3.3V ──── ESP32 VCC
 ```
 
-## Komponenten-Liste
+## Bill of Materials
 
-| Komponente | Bezeichnung | Beschreibung | Kosten (ca.) |
-|------------|-------------|--------------|--------------|
-| Mikrocontroller | ESP32-C3-DevKitM-1 | Ultra-low power, WiFi, Bluetooth | 8€ |
-| I2C Expander | PCF8574 Modul | 8-bit I/O Expander | 3€ |
-| Temperatursensor | DS18B20 wasserdicht | Digitaler Temperatursensor | 5€ |
-| Batterien | 4x AA Lithium | Energizer Ultimate Lithium | 12€ |
-| Widerstände | 4.7kΩ, 100kΩ, 10kΩ | Pull-up und Voltage Divider | 1€ |
-| Kondensatoren | 100nF, 10µF | Entkopplung | 1€ |
-| **Gesamt** | | | **30€** |
+| Component | Part Number | Description | Cost (approx.) |
+|-----------|-------------|-------------|----------------|
+| Microcontroller | ESP32-C3-DevKitM-1 | Ultra-low power, WiFi, Bluetooth | $8 |
+| I2C Expander | PCF8574 Module | 8-bit I/O Expander | $3 |
+| Temperature Sensor | DS18B20 Waterproof | Digital Temperature Sensor | $5 |
+| Batteries | 4x AA Lithium | Energizer Ultimate Lithium | $12 |
+| Resistors | 4.7kΩ, 100kΩ, 10kΩ | Pull-up and Voltage Divider | $1 |
+| Capacitors | 100nF, 10µF | Decoupling | $1 |
+| **Total** | | | **$30** |
 
-## Leiterplatten-Layout
+## PCB Layout Considerations
 
-### PCB Überlegungen
-- **Kompakte 2-Layer PCB** für Platzierung im Rain Bird Gehäuse
-- **I2C Bus Design**: Kurze Leitungen, ordentliche Terminierung
-- **Power Rails**: 3.3V und GND Planes für stabilen Betrieb
-- **Antenna Keep-out**: 15mm Abstand zur ESP32 Antenne
+### PCB Design
+- **Compact 2-Layer PCB** for placement in Rain Bird enclosure
+- **I2C Bus Design**: Short traces, proper termination
+- **Power Rails**: 3.3V and GND planes for stable operation
+- **Antenna Keep-out**: 15mm clearance from ESP32 antenna
 
-### Mechanische Integration
+### Mechanical Integration
 ```
-Rain Bird ESP-BAT-BT-6 Gehäuse:
+Rain Bird ESP-BAT-BT-6 Enclosure:
 ┌─────────────────────────────────┐
 │  ┌─────────────┐                │
 │  │ Rain Bird   │  ┌───────────┐ │
@@ -79,69 +81,69 @@ Rain Bird ESP-BAT-BT-6 Gehäuse:
 │  └─────────────┘  └───────────┘ │
 │                                 │
 │  ┌─────────────────────────────┐ │
-│  │    4x AA Batterien          │ │
+│  │    4x AA Batteries          │ │
 │  └─────────────────────────────┘ │
 └─────────────────────────────────┘
 ```
 
-## Stromversorgung
+## Power Supply Design
 
-### Batteriekonfiguration
+### Battery Configuration
 ```
-4x AA Lithium in Serie:
-- Spannung: 6V nominal (1.5V × 4)
-- Kapazität: 2900mAh (L91 Ultimate Lithium)
-- Temperaturbereich: -40°C bis +60°C
-- Selbstentladung: <1% pro Jahr
+4x AA Lithium in series:
+- Voltage: 6V nominal (1.5V × 4)
+- Capacity: 2900mAh (L91 Ultimate Lithium)
+- Temperature range: -40°C to +60°C
+- Self-discharge: <1% per year
 ```
 
-### Spannungsregelung
-- **LDO Regler**: 3.3V, ultra-low quiescent current (<1µA)
-- **Eingangsspannung**: 4.5V - 6V (Batterie-Entladekurve)
-- **Ausgangsrippel**: <10mV für saubere ADC-Messungen
+### Voltage Regulation
+- **LDO Regulator**: 3.3V, ultra-low quiescent current (<1µA)
+- **Input Voltage**: 4.5V - 6V (battery discharge curve)
+- **Output Ripple**: <10mV for clean ADC measurements
 
 ### Battery Monitoring
 ```cpp
-// Voltage Divider für Batteriespannung
+// Voltage divider for battery voltage
 float readBatteryVoltage() {
     int raw = analogRead(BATTERY_PIN);
-    float voltage = (raw / 4095.0) * 3.3 * 2.0;  // 2:1 Teiler
+    float voltage = (raw / 4095.0) * 3.3 * 2.0;  // 2:1 divider
     return voltage;
 }
 
-// Batterie-Prozentsatz berechnen
+// Calculate battery percentage
 int getBatteryPercentage(float voltage) {
-    if (voltage > 5.8) return 100;      // Frische Batterien
-    if (voltage > 5.0) return 75;       // Gut
-    if (voltage > 4.5) return 50;       // Mittel
-    if (voltage > 4.0) return 25;       // Niedrig
-    return 0;                           // Kritisch
+    if (voltage > 5.8) return 100;      // Fresh batteries
+    if (voltage > 5.0) return 75;       // Good
+    if (voltage > 4.5) return 50;       // Medium
+    if (voltage > 4.0) return 25;       // Low
+    return 0;                           // Critical
 }
 ```
 
 ## I2C Bus Design
 
-### PCF8574 Konfiguration
+### PCF8574 Configuration
 ```cpp
-// I2C Adresse: 0x20 (A0-A2 = GND)
+// I2C Address: 0x20 (A0-A2 = GND)
 // Pin Assignment:
 // P0: Rain Bird Sensor Interface
-// P1-P7: Reserviert für Erweiterungen
+// P1-P7: Reserved for expansions
 ```
 
-### Bus Spezifikationen
-- **Frequenz**: 100kHz (Standard-Mode)
-- **Pull-up Widerstände**: 4.7kΩ (extern)
-- **Kabellänge**: <10cm (kurze Verbindungen)
-- **Störsicherheit**: Twisted-Pair für längere Verbindungen
+### Bus Specifications
+- **Frequency**: 100kHz (Standard-Mode)
+- **Pull-up Resistors**: 4.7kΩ (external)
+- **Cable Length**: <10cm (short connections)
+- **Noise Immunity**: Twisted-pair for longer connections
 
-## Temperatursensor Integration
+## Temperature Sensor Integration
 
-### DS18B20 Spezifikationen
-- **Messbereich**: -55°C bis +125°C
-- **Genauigkeit**: ±0.5°C (-10°C bis +85°C)
-- **Auflösung**: 9-12 Bit konfigurierbar
-- **Parasitic Power**: Nicht verwendet (separate VCC)
+### DS18B20 Specifications
+- **Measurement Range**: -55°C to +125°C
+- **Accuracy**: ±0.5°C (-10°C to +85°C)
+- **Resolution**: 9-12 bit configurable
+- **Parasitic Power**: Not used (separate VCC)
 
 ### OneWire Bus
 ```cpp
@@ -155,72 +157,72 @@ DallasTemperature sensors(&oneWire);
 void initTemperatureSensor() {
     sensors.begin();
     sensors.setResolution(TEMPERATURE_PRECISION);
-    sensors.setWaitForConversion(false);  // Async für Power Saving
+    sensors.setWaitForConversion(false);  // Async for power saving
 }
 ```
 
-## EMV und Signal-Integrität
+## EMC and Signal Integrity
 
-### Entstörung
-- **Ferrit-Perlen**: Auf Versorgungsleitungen
-- **Bypass-Kondensatoren**: 100nF + 10µF an VCC
-- **Schirmung**: Optionale Abschirmung für RF-kritische Bereiche
+### Noise Suppression
+- **Ferrite Beads**: On power supply lines
+- **Bypass Capacitors**: 100nF + 10µF at VCC
+- **Shielding**: Optional shielding for RF-critical areas
 
 ### Grounding
-- **Single-Point Ground**: Sternförmige Masseführung
-- **Analoge/Digitale Trennung**: Separate Massebereiche für ADC
-- **Chassis Ground**: Verbindung zum Metallgehäuse
+- **Single-Point Ground**: Star-shaped ground routing
+- **Analog/Digital Separation**: Separate ground areas for ADC
+- **Chassis Ground**: Connection to metal enclosure
 
 ## Mechanical Design
 
-### Gehäuse-Integration
-- **IP68 Rating**: Nutzung des Rain Bird Gehäuses
-- **Kabeleinführungen**: M12 wasserdichte Steckverbinder
-- **Montage**: 3D-gedruckte Halterungen für PCB
-- **Wartung**: Einfacher Zugang für Batteriewechsel
+### Enclosure Integration
+- **IP68 Rating**: Utilizing Rain Bird enclosure
+- **Cable Entries**: M12 waterproof connectors
+- **Mounting**: 3D-printed brackets for PCB
+- **Maintenance**: Easy access for battery replacement
 
-### Umweltbedingungen
-- **Betriebstemperatur**: -20°C bis +60°C
-- **Lagertemperatur**: -40°C bis +85°C
-- **Luftfeuchtigkeit**: 0-95% nicht kondensierend
-- **Wasserschutz**: IP68 durch Rain Bird Gehäuse
+### Environmental Conditions
+- **Operating Temperature**: -20°C to +60°C
+- **Storage Temperature**: -40°C to +85°C
+- **Humidity**: 0-95% non-condensing
+- **Water Protection**: IP68 through Rain Bird enclosure
 
-## Erweiterungsmöglichkeiten
+## Expansion Options
 
-### Zusätzliche Sensoren
-- **Bodenfeuchtigkeit**: Analog/I2C Sensoren
-- **Lichtsensor**: BH1750 für Tageslicht-Erkennung
-- **Luftfeuchtigkeit**: SHT30 für Mikroklima-Monitoring
+### Additional Sensors
+- **Soil Moisture**: Analog/I2C sensors
+- **Light Sensor**: BH1750 for daylight detection
+- **Humidity**: SHT30 for microclimate monitoring
 
 ### Solar Power Option
 ```
-Solar Panel (5W) → MPPT Controller → LiFePO4 Batterie → ESP32
-                                  ↘ Backup zu AA Batterien
+Solar Panel (5W) → MPPT Controller → LiFePO4 Battery → ESP32
+                                  ↘ Backup to AA Batteries
 ```
 
 ### Connectivity Upgrades
-- **LoRaWAN**: Für große Reichweiten ohne WiFi
-- **Cellular**: 4G Modem für absolute Konnektivität
-- **Ethernet**: POE für permanente Installation
+- **LoRaWAN**: For long-range without WiFi
+- **Cellular**: 4G modem for absolute connectivity
+- **Ethernet**: POE for permanent installation
 
-## Testing und Validation
+## Testing and Validation
 
 ### Power Consumption Testing
 ```cpp
 // Deep Sleep Current Measurement
 esp_sleep_enable_timer_wakeup(60 * 1000000);  // 60s
 esp_deep_sleep_start();
-// Gemessen: 18.5µA ±2µA
+// Measured: 18.5µA ±2µA
 ```
 
 ### Environmental Testing
-- **Temperaturzyklen**: -20°C bis +60°C
-- **Feuchtigkeits-Test**: 95% RH für 48h
-- **Vibrations-Test**: Gemäß DIN EN 60068-2-6
-- **EMV-Test**: CE-Konformität prüfen
+- **Temperature Cycles**: -20°C to +60°C
+- **Humidity Test**: 95% RH for 48h
+- **Vibration Test**: According to DIN EN 60068-2-6
+- **EMC Test**: CE compliance verification
 
 ### Field Testing
-- **Battery Life**: 6-Monate Langzeittest
-- **WiFi Range**: Reichweiten-Test in verschiedenen Umgebungen
-- **Weather API**: Zuverlässigkeit bei verschiedenen Wetterlagen
-- **Rain Bird Integration**: Kompatibilitäts-Test mit verschiedenen Controllern
+- **Battery Life**: 6-month long-term test
+- **WiFi Range**: Range testing in various environments
+- **Weather API**: Reliability in different weather conditions
+- **Rain Bird Integration**: Compatibility test with various controllers
